@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 
+require 'optparse'
 require 'set'
 
 module Enumerable
@@ -14,18 +15,32 @@ module Enumerable
   end
 end
 
+Options = Struct.new(:interactive, :num)
+
+def parse_args(args)
+  options = Options.new(false, 5)
+  OptionParser.new do |opts|
+    opts.on('-i', '--interactive', 'Interactively choose a branch to switch to') do
+      options.interactive = true
+    end
+
+    opts.on('-n VAL', '--num=VAL', Integer, 'Number of recent branches to display') do |val|
+      options.num = val
+    end
+
+    opts.on('-h', '--help', 'Display this help') do |val|
+      puts opts
+      exit 0
+    end
+  end.parse!(args)
+  options.freeze
+end
+
 def verify_is_git_repo!
   system('git rev-parse --is-inside-work-tree >/dev/null') or exit $?.to_i
 end
 
-def num_branches_to_get
-  argument = ARGV.first
-  return 5 unless argument
-
-  match = ARGV.first.match(/^-?(\d+)$/)
-  raise ArgumentError, "invalid count: `#{argument}'" unless match
-  match.captures[0].to_i
-end
+options = parse_args(ARGV.dup)
 
 verify_is_git_repo!
 reflog = IO.popen('git reflog')
@@ -37,6 +52,17 @@ recent_branches = reflog.readlines.lazy.flat_map do |line|
   match = line.match(/moving from (\S+) to (\S+)/)
   branches = match && match.captures || []
   branches.select { |branch| all_branches.include? branch }
-end.take_uniq num_branches_to_get
+end.take_uniq(options.num)
 
-puts recent_branches.to_a
+if options.interactive
+  recent_branches.to_a.each.with_index do |branch, i|
+    puts "#{i + 1}) #{branch}"
+  end
+
+  print 'Choose a branch to switch to: '
+  branch_num = Integer($stdin.gets)
+  branch = recent_branches.to_a[branch_num - 1]
+  system "git checkout #{branch}"
+else
+  puts recent_branches.to_a
+end
