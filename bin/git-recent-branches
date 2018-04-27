@@ -73,4 +73,12 @@ def run!
   end
 end
 
+trap = proc do
+  puts
+  exit 1
+end
+
+Signal.trap('SIGINT', trap)
+Signal.trap('SIGTERM', trap)
+
 run!
