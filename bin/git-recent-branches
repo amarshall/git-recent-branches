@@ -94,7 +94,7 @@ end
 
 trap = proc do
   puts
-  exit 1
+  exit
 end
 
 Signal.trap('SIGINT', trap)
