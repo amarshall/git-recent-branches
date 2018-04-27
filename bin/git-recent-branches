@@ -3,14 +3,20 @@
 require 'optparse'
 require 'set'
 
-module Enumerable
-  def take_uniq n
-    raise ArgumentError, 'attempt to take negative size' if n < 0
-    return [] if n == 0
-
-    each.with_object(Set.new) do |elem, elems|
-      elems << elem
-      break elems if elems.size == n
+# Backport for Ruby < 2.4
+class Enumerator::Lazy
+  unless instance_methods.include?(:uniq)
+    def uniq
+      elems = Set.new
+      select do |elem|
+        val = block_given? ? yield(e) : e
+        if set.include?(val)
+          false
+        else
+          elems << val
+          true
+        end
+      end
     end
   end
 end
@@ -63,7 +69,7 @@ def recent_branches(num)
     all_branches.include?(branch)
   end.reject do |branch|
     branch == current_branch
-  end.take_uniq(num)
+  end.uniq.take(num)
 end
 
 def run!
