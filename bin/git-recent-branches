@@ -79,6 +79,11 @@ def run!
   recent_branches = recent_branches(options.num).to_a
 
   if options.interactive
+    if recent_branches.empty?
+      $stderr.puts('No recent branches')
+      exit
+    end
+
     recent_branches.each.with_index do |branch, i|
       puts "#{i + 1}) #{branch}"
     end
