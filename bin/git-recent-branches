@@ -84,7 +84,11 @@ def run!
     end
 
     print 'Choose a branch to switch to: '
-    branch_num = Integer($stdin.gets)
+    input = $stdin.gets.strip
+    case input
+    when 'q', '' then exit 0
+    else branch_num = Integer(input)
+    end
     branch = recent_branches[branch_num - 1]
     system "git checkout #{branch}"
   else
