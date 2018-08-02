@@ -21,5 +21,5 @@ brew install git-recent-branches
 
 ```
 cd some-git-repo
-git recent-branches
+git recent-branches --help
 ```
