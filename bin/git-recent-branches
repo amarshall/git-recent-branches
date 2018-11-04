@@ -9,7 +9,7 @@ class Enumerator::Lazy
     def uniq
       elems = Set.new
       select do |elem|
-        val = block_given? ? yield(e) : e
+        val = block_given? ? yield(e) : elem
         if set.include?(val)
           false
         else
