@@ -2,6 +2,7 @@
 # frozen_string_literal: true
 
 require 'english'
+require 'open3'
 require 'optparse'
 require 'set'
 
@@ -45,7 +46,9 @@ def parse_args(args)
 end
 
 def verify_is_git_repo!
-  system('git rev-parse --is-inside-work-tree >/dev/null') or exit $CHILD_STATUS.to_i
+  _, _, thread = Open3.popen2('git', 'rev-parse', '--is-inside-work-tree', in: '/dev/null', out: '/dev/null')
+  status = thread.value
+  status.success? or exit status.exitstatus
 end
 
 def current_branch
@@ -97,7 +100,7 @@ def run!
     else branch_num = Integer(input)
     end
     branch = recent_branches[branch_num - 1]
-    system "git checkout #{branch}"
+    system 'git', 'checkout', branch
   else
     puts recent_branches
   end
