@@ -25,6 +25,7 @@ class Enumerator::Lazy
 end
 
 Options = Struct.new(:interactive, :num)
+VERSION = '0.2.0'
 
 def parse_args(args)
   options = Options.new(false, 5)
@@ -39,6 +40,11 @@ def parse_args(args)
 
     opts.on('-h', '--help', 'Display this help') do
       puts opts
+      exit 0
+    end
+
+    opts.on('--version', 'Show version') do
+      puts VERSION
       exit 0
     end
   end.parse!(args)
