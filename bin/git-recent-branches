@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
+require 'english'
 require 'optparse'
 require 'set'
 
@@ -34,7 +36,7 @@ def parse_args(args)
       options.num = val
     end
 
-    opts.on('-h', '--help', 'Display this help') do |val|
+    opts.on('-h', '--help', 'Display this help') do
       puts opts
       exit 0
     end
@@ -43,21 +45,21 @@ def parse_args(args)
 end
 
 def verify_is_git_repo!
-  system('git rev-parse --is-inside-work-tree >/dev/null') or exit $?.to_i
+  system('git rev-parse --is-inside-work-tree >/dev/null') or exit $CHILD_STATUS.to_i
 end
 
 def current_branch
   name = `git rev-parse --abbrev-ref HEAD`.strip
-  if $?.success?
+  if $CHILD_STATUS.success?
     name
   else
-    exit $?.to_i
+    exit $CHILD_STATUS.to_i
   end
 end
 
 def recent_branches(num)
   reflog = IO.popen('git reflog')
-  branch_list = IO.popen(%q(git for-each-ref --format='%(refname:short)' refs/heads/))
+  branch_list = IO.popen("git for-each-ref --format='%(refname:short)' refs/heads/")
   current_branch = current_branch()
 
   all_branches = branch_list.readlines.map(&:strip).to_set
