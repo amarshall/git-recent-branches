@@ -25,7 +25,7 @@ class Enumerator::Lazy
 end
 
 Options = Struct.new(:interactive, :num)
-VERSION = '0.2.0'
+VERSION = '0.3.0'
 
 def parse_args(args)
   options = Options.new(false, 5)
