@@ -13,7 +13,7 @@ class Enumerator::Lazy
       elems = Set.new
       select do |elem|
         val = block_given? ? yield(e) : elem
-        if set.include?(val)
+        if elems.include?(val)
           false
         else
           elems << val
