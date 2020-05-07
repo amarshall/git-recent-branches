@@ -5,7 +5,7 @@ Git command plugin to list recently checked-out branches in the current reposito
 ## Installation
 
 ```
-make install prefix=/path/to/install
+make prefix=/path/to/install install
 ```
 
 ### Homebrew

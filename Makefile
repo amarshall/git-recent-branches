@@ -1,3 +1,7 @@
+.PHONY: install
+
+INSTALL ?= install
+
 install:
-	mkdir -p ${prefix}/bin/
-	cp bin/* ${prefix}/bin/
+	mkdir -p ${DESTDIR}${prefix}/bin/
+	${INSTALL} -m 0755 bin/git-recent-branches ${DESTDIR}${prefix}/bin/git-recent-branches
