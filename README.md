@@ -17,6 +17,15 @@ brew tap amarshall/formula
 brew install git-recent-branches
 ```
 
+### Fedora COPR
+
+Install from COPR:
+
+```
+copr enable amarshall/misc
+dnf install git-recent-branches
+```
+
 ## Usage
 
 ```
