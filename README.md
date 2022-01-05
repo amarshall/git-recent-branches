@@ -26,6 +26,16 @@ copr enable amarshall/misc
 dnf install git-recent-branches
 ```
 
+### Nix
+
+Run via Flake:
+
+```nix
+nix shell 'github:amarshall/git-recent-branches'
+```
+
+For less-ephemeral usage, the Flake provides an `overlay` attribute.
+
 ## Usage
 
 ```
