@@ -1,9 +1,14 @@
-{ ruby, stdenv, ... }:
-let
+{ lib
+, ruby
+, stdenv
+}:
+
+stdenv.mkDerivation {
+  pname = "git-recent-branches";
   version = "0.3.2";
-in stdenv.mkDerivation {
-  name = "git-recent-branches-${version}";
   buildInputs = [ ruby ];
   makeFlags = [ "prefix=$(out)" ];
   src = ./.;
+
+  meta.platforms = ruby.meta.platforms;
 }
