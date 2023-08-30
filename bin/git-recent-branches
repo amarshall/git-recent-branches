@@ -6,24 +6,6 @@ require 'open3'
 require 'optparse'
 require 'set'
 
-# Backport for Ruby < 2.4
-class Enumerator::Lazy
-  unless instance_methods.include?(:uniq)
-    def uniq
-      elems = Set.new
-      select do |elem|
-        val = block_given? ? yield(e) : elem
-        if elems.include?(val)
-          false
-        else
-          elems << val
-          true
-        end
-      end
-    end
-  end
-end
-
 Options = Struct.new(:interactive, :num)
 VERSION = '0.3.2'
 
